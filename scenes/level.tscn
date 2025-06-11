@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=4 uid="uid://cm3egxg8id4ko"]
+[gd_scene load_steps=6 format=4 uid="uid://cm3egxg8id4ko"]
 
 [ext_resource type="Texture2D" uid="uid://cmrq3nejm0hua" path="res://graphics/level/tilesets/level_tilemap.png" id="1_2q6dc"]
 [ext_resource type="PackedScene" uid="uid://ca7oslx7l1p03" path="res://scenes/player.tscn" id="2_w7c3h"]
-[ext_resource type="PackedScene" uid="uid://b4uac3vhvuoxo" path="res://scenes/bg.tscn" id="3_w8frs"]
 [ext_resource type="PackedScene" uid="uid://d25qe8nggfwv6" path="res://scenes/bee.tscn" id="4_mx8sn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w7c3h"]
@@ -44,9 +43,7 @@ tile_set = SubResource("TileSet_rd3vj")
 [node name="CharacterBody2D" parent="." instance=ExtResource("2_w7c3h")]
 position = Vector2(260, 57)
 
-[node name="BG" parent="." instance=ExtResource("3_w8frs")]
-
 [node name="Enemies" type="Node2D" parent="."]
 
 [node name="Bee" parent="Enemies" instance=ExtResource("4_mx8sn")]
-position = Vector2(287, 41)
+position = Vector2(294, 45)
