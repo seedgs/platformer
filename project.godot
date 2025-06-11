@@ -11,9 +11,14 @@ config_version=5
 [application]
 
 config/name="Platformer"
+run/main_scene="uid://cm3egxg8id4ko"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
 [dotnet]
 
 project/assembly_name="Platformer"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
