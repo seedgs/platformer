@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=4 uid="uid://cm3egxg8id4ko"]
+[gd_scene load_steps=10 format=4 uid="uid://cm3egxg8id4ko"]
 
 [ext_resource type="Texture2D" uid="uid://cmrq3nejm0hua" path="res://graphics/level/tilesets/level_tilemap.png" id="1_2q6dc"]
 [ext_resource type="PackedScene" uid="uid://ca7oslx7l1p03" path="res://scenes/player.tscn" id="2_w7c3h"]
@@ -34,6 +34,18 @@ texture = ExtResource("1_2q6dc")
 [sub_resource type="TileSet" id="TileSet_rd3vj"]
 sources/0 = SubResource("TileSetAtlasSource_w7c3h")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w8frs"]
+size = Vector2(160, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mx8sn"]
+size = Vector2(48, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ppgk2"]
+size = Vector2(48, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2r41h"]
+size = Vector2(48, 1)
+
 [node name="Level" type="Node2D"]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
@@ -41,9 +53,35 @@ tile_map_data = PackedByteArray("AAANAAQAAAADAAAAAAAOAAQAAAABAAIAAAAPAAQAAAAAAAI
 tile_set = SubResource("TileSet_rd3vj")
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("2_w7c3h")]
-position = Vector2(260, 57)
+position = Vector2(260, 36)
 
 [node name="Enemies" type="Node2D" parent="."]
 
 [node name="Bee" parent="Enemies" instance=ExtResource("4_mx8sn")]
 position = Vector2(294, 45)
+
+[node name="Floor" type="Node2D" parent="."]
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="Floor"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/StaticBody2D2"]
+position = Vector2(288, 64.5)
+shape = SubResource("RectangleShape2D_w8frs")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="Floor"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/StaticBody2D3"]
+position = Vector2(184, 128.5)
+shape = SubResource("RectangleShape2D_mx8sn")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Floor"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/StaticBody2D"]
+position = Vector2(424, 64.5)
+shape = SubResource("RectangleShape2D_ppgk2")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="Floor"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/StaticBody2D4"]
+position = Vector2(488, 64.5)
+shape = SubResource("RectangleShape2D_2r41h")
