@@ -67,7 +67,8 @@ animations = [{
 collision_layer = 4
 collision_mask = 3
 script = ExtResource("1_g2els")
-jump_force = -350
+jump_force_first_time = -300
+jump_force_second_time = -150
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-5, -5, -5, -7, 2, -7, 3, -6, 5, -3, 5, 2, 7, 2, 7, 5, 5, 5, 5, 7, -4, 7, -4, 6, -4, 5, -7, 5, -7, 2, -4, 2, -4, -5)
@@ -80,7 +81,7 @@ position_smoothing_speed = 15.0
 [node name="Timers" type="Node" parent="."]
 
 [node name="CooldownTimer" type="Timer" parent="Timers"]
-wait_time = 0.6
+wait_time = 0.3
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_g2els")

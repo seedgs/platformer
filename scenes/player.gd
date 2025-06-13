@@ -4,7 +4,8 @@ extends CharacterBody2D
 var direction_x: float = 0.0
 
 # 跳跃、重力、移动参数
-@export var jump_force: int = -400
+@export var jump_force_first_time: int = 0
+@export var jump_force_second_time: int = 0
 @export var gravity_force: int = 10
 @export var speed_horizonal: int = 150
 
@@ -88,8 +89,13 @@ func get_input():
 	"""
 	if Input.is_action_just_pressed("Jump") and jump_count < max_jump_count:
 		#施加跳跃的力
-		velocity.y = jump_force
+		velocity.y = jump_force_first_time
+		
 		jump_count += 1
+		
+		# 当检测为二段跳状态的时候，第二次跳跃的力衰减为第一次的一半
+		if jump_count == 2:
+			velocity.y = jump_force_second_time
 		
 
 
@@ -126,7 +132,7 @@ func get_animation():
 		# 当在跳跃的状态下，按下射击，启动跳跃状态下的射击动画
 		if !can_shoot:
 			animation = 'jump_shoot'
-			
+		
 	
 	# 当检测到横向数值不为0（就是按下方向键的时候） 且 没有按下射击时候，启动行走动画
 	elif  direction_x != 0 and can_shoot :
