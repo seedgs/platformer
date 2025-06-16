@@ -21,6 +21,10 @@ var jump_count := 0
 var can_shoot :bool = true
 
 
+# 射击信号
+signal shoot(pos: Vector2)
+
+
 
 func _ready() -> void:
 	pass
@@ -33,7 +37,7 @@ func _process(delta: float) -> void:
 	get_animation()
 	
 	# 水平移动
-	velocity.x = direction_x * speed_horizonal
+	velocity.x = direction_x * speed_horizonal 
 
 	# "is_on_floor()"检测是否地面碰撞，为布尔值
 	if is_on_floor():
@@ -102,7 +106,9 @@ func get_input():
 	# 射击冷却判断
 	if Input.is_action_just_pressed("shoot") and can_shoot:
 		can_shoot = false
-		print("shoot")
+		
+		shoot.emit(global_position)
+		
 		# 启动冷却计时器
 		$Timers/CooldownTimer.start()
 		
@@ -110,7 +116,7 @@ func get_input():
 
 # 重力逻辑
 func apply_gravity():
-	velocity.y += gravity_force
+	velocity.y += gravity_force 
 
 
 
@@ -123,6 +129,8 @@ func _on_cooldown_timer_timeout() -> void:
 # 动画逻辑
 func get_animation():
 	
+
+	
 	# 默认状态的动画放为闲置状态
 	var animation = 'idle'
 	
@@ -132,7 +140,7 @@ func get_animation():
 		# 当在跳跃的状态下，按下射击，启动跳跃状态下的射击动画
 		if !can_shoot:
 			animation = 'jump_shoot'
-		
+
 	
 	# 当检测到横向数值不为0（就是按下方向键的时候） 且 没有按下射击时候，启动行走动画
 	elif  direction_x != 0 and can_shoot :
@@ -141,6 +149,7 @@ func get_animation():
 	# 当检测到按下射击的时候，启动射击动画
 	elif !can_shoot:
 		animation = 'idle_shoot'
+
 		
 		# 当按下射击 且 也按下移动的时候，启动射击移动动画
 		if direction_x != 0:
