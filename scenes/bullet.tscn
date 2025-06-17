@@ -7,8 +7,9 @@
 size = Vector2(12, 6)
 
 [node name="Bullet" type="Area2D"]
+monitoring = false
 script = ExtResource("1_y25gk")
-bullet_speed = 500
+bullet_speed = 350
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_mkf8s")

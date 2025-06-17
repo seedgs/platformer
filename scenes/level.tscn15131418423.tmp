@@ -90,4 +90,5 @@ shape = SubResource("RectangleShape2D_2r41h")
 
 [node name="Bullet" type="Node2D" parent="."]
 
+[connection signal="process" from="CharacterBody2D" to="." method="_on_character_body_2d_process"]
 [connection signal="shoot" from="CharacterBody2D" to="." method="_on_character_body_2d_shoot"]
