@@ -6,7 +6,7 @@ var direction_x: float = 0.0
 
 
 # 设在人物静止状态下的方向
-var last_facing_direction := 1  # 1 表示右，-1 表示左
+var last_facing_direction := 0  # 1 表示右，-1 表示左
 
 
 # 跳跃参数
@@ -34,9 +34,13 @@ var jump_count := 0
 # 射击冷却控制
 var can_shoot :bool = true
 
-
 # 射击信号
 signal shoot(pos: Vector2)
+
+# 控制射击
+var is_shooting: bool = false
+var shoot_hold_time: float = 0.0
+var shoot_trigger_threshold: float = 0.3  # 长按超过 0.3 秒触发持续射击
 
 
 func _ready() -> void:
@@ -59,7 +63,18 @@ func _process(delta: float) -> void:
 		
 		jump_count = 0 # 落地重置跳跃次数
 
-	move_and_slide()
+	move_and_slide()	
+	
+	# 长按射击逻辑
+	if Input.is_action_pressed("shoot"):
+		shoot_hold_time += delta
+
+		if shoot_hold_time >= shoot_trigger_threshold and not is_shooting:
+			start_shooting()
+	else:
+		shoot_hold_time = 0.0
+		stop_shooting()
+
 	
 
 
@@ -75,7 +90,7 @@ func get_input():
 	"""
 	
 	direction_x = Input.get_axis("Left", "Right")
-	
+
 	# 逻辑注释
 	"""
 	# 当没有任何操作的时候，不能让子弹朝一个方向移动
@@ -85,7 +100,6 @@ func get_input():
 	# 这个情况下更新变量 'last_facing_direction = direction_x '
 	"""
 	if direction_x != 0:
-
 		last_facing_direction = direction_x # 'last_facing_direction' 被赋 'direction_x' 的值（direction_x的数值是根据按下的左右键来确定的）
 		
 		# 转向逻辑
@@ -132,6 +146,8 @@ func get_input():
 
 	# 射击冷却判断
 	if Input.is_action_just_pressed("shoot") and can_shoot:
+			
+		
 		can_shoot = false
 		
 		# 逻辑注释
@@ -151,18 +167,34 @@ func apply_gravity():
 	velocity.y += gravity_force 
 
 
+# =============== 射击逻辑 ====================
+func start_shooting():
+	is_shooting = true
+	can_shoot = false
+	shoot.emit(global_position, last_facing_direction)
+	
+	$Timers/CooldownTimer.start()
 
-# 计时器回调（重新允许射击）
-func _on_cooldown_timer_timeout() -> void:
+func stop_shooting():
+	is_shooting = false
 	can_shoot = true
-	
-	
-	
+	$Timers/CooldownTimer.stop()
+
+
+func _on_cooldown_timer_timeout() -> void:
+	if is_shooting:
+		shoot.emit(global_position, last_facing_direction)
+	else:
+		can_shoot = true
+	can_shoot = true
+
+
 # 动画逻辑
 func get_animation():
 	
 
 	var animation = 'idle' # 默认状态的动画放为闲置状态
+	
 	
 	
 	if not is_on_floor(): # 当检测不与地面碰撞的时候，启动跳跃动画
@@ -171,16 +203,32 @@ func get_animation():
 		if !can_shoot: # 当在跳跃的状态下，按下射击，启动跳跃状态下的射击动画
 			animation = 'jump_shoot'
 
+
 	
-	elif  direction_x != 0 and can_shoot : # 当检测到横向数值不为0（就是按下方向键的时候） 且 没有按下射击时候，启动行走动画
+	elif direction_x != 0 and can_shoot : # 当检测到横向数值不为0（就是按下方向键的时候） 且 没有按下射击时候，启动行走动画
 		animation = 'walk'
 		
 	
-	elif !can_shoot: # 当检测到按下射击的时候，启动射击动画
+	elif !can_shoot : # 当检测到按下射击的时候，启动射击动画
 		animation = 'idle_shoot'
 
 		
 		if direction_x != 0: # 当按下射击 且 也按下移动的时候，启动射击移动动画
 			animation = 'shoot_walk'
+		
+
+	# 当在长按的状态下， 原地长按射击
+	if shoot_hold_time > shoot_trigger_threshold:
+		animation = 'idle_shoot'
+		
+		# 当在长按的状态下， 移动长按射击
+		if direction_x != 0:
+			animation = 'shoot_walk'
+		
+		# 当在长按的状态下， 跳跃长按射击
+		if not is_on_floor(): 
+			animation = 'jump_shoot'
+
 
 	$AnimatedSprite2D.animation = animation # 加载动画
+	
