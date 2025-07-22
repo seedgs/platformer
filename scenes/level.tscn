@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=4 uid="uid://cm3egxg8id4ko"]
+[gd_scene load_steps=12 format=4 uid="uid://cm3egxg8id4ko"]
 
 [ext_resource type="Texture2D" uid="uid://cmrq3nejm0hua" path="res://graphics/level/tilesets/level_tilemap.png" id="1_2q6dc"]
 [ext_resource type="Script" uid="uid://vp1lwu8pgwjr" path="res://scenes/level.gd" id="1_mx8sn"]
 [ext_resource type="PackedScene" uid="uid://ca7oslx7l1p03" path="res://scenes/player.tscn" id="2_w7c3h"]
 [ext_resource type="PackedScene" uid="uid://d25qe8nggfwv6" path="res://scenes/bee.tscn" id="4_mx8sn"]
+[ext_resource type="PackedScene" uid="uid://bestklm84v3gi" path="res://scenes/gun.tscn" id="5_ppgk2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w7c3h"]
 texture = ExtResource("1_2q6dc")
@@ -89,5 +90,10 @@ position = Vector2(488, 64.5)
 shape = SubResource("RectangleShape2D_2r41h")
 
 [node name="Bullet" type="Node2D" parent="."]
+
+[node name="Guns" type="Node2D" parent="."]
+
+[node name="Gun" parent="Guns" instance=ExtResource("5_ppgk2")]
+position = Vector2(270, 51)
 
 [connection signal="shoot" from="CharacterBody2D" to="." method="_on_character_body_2d_shoot"]

@@ -65,7 +65,7 @@ animations = [{
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 4
-collision_mask = 3
+collision_mask = 11
 script = ExtResource("1_g2els")
 jump_force_first_time = -300
 jump_force_second_time = -150

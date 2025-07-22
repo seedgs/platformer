@@ -5,7 +5,7 @@ extends CharacterBody2D
 var direction_x: float = 0.0
 
 
-# 设在人物静止状态下的方向
+# 设 在人物静止状态下的方向
 var last_facing_direction := 0  # 1 表示右，-1 表示左
 
 
@@ -37,10 +37,14 @@ var can_shoot :bool = true
 # 射击信号
 signal shoot(pos: Vector2)
 
+
 # 控制射击
 var is_shooting: bool = false
 var shoot_hold_time: float = 0.0
 var shoot_trigger_threshold: float = 0.3  # 长按超过 0.3 秒触发持续射击
+
+# 默认情况下，玩家没有枪
+var has_gun :bool = false
 
 
 func _ready() -> void:
@@ -54,7 +58,7 @@ func _process(delta: float) -> void:
 	get_animation()
 	
 	
-	
+
 	# 水平移动
 	velocity.x = direction_x * speed_horizonal 
 
@@ -66,9 +70,11 @@ func _process(delta: float) -> void:
 	move_and_slide()	
 	
 	# 长按射击逻辑
-	if Input.is_action_pressed("shoot"):
+	if Input.is_action_pressed("shoot") and has_gun:
+		
+		# 因为在_process方法内，一旦触发（不管 长按或者点击）“shoot”按钮，就会触发“shoot_hold_time” 的增加
 		shoot_hold_time += delta
-
+		
 		if shoot_hold_time >= shoot_trigger_threshold and not is_shooting:
 			start_shooting()
 	else:
@@ -145,7 +151,7 @@ func get_input():
 
 
 	# 射击冷却判断
-	if Input.is_action_just_pressed("shoot") and can_shoot:
+	if Input.is_action_just_pressed("shoot") and can_shoot and has_gun:
 			
 		
 		can_shoot = false
@@ -167,7 +173,7 @@ func apply_gravity():
 	velocity.y += gravity_force 
 
 
-# =============== 射击逻辑 ====================
+# 射击开始
 func start_shooting():
 	is_shooting = true
 	can_shoot = false
@@ -175,6 +181,7 @@ func start_shooting():
 	
 	$Timers/CooldownTimer.start()
 
+# 射击停止
 func stop_shooting():
 	is_shooting = false
 	can_shoot = true
@@ -186,7 +193,6 @@ func _on_cooldown_timer_timeout() -> void:
 		shoot.emit(global_position, last_facing_direction)
 	else:
 		can_shoot = true
-	can_shoot = true
 
 
 # 动画逻辑
@@ -231,4 +237,7 @@ func get_animation():
 
 
 	$AnimatedSprite2D.animation = animation # 加载动画
+	
+	
+
 	
