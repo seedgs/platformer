@@ -57,6 +57,9 @@ tile_set = SubResource("TileSet_rd3vj")
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("2_w7c3h")]
 position = Vector2(245, 15)
+gravity_force = 10
+speed_horizonal = 150
+max_jump_count = 2
 
 [node name="Enemies" type="Node2D" parent="."]
 

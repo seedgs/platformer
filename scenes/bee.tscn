@@ -1,10 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://d25qe8nggfwv6"]
+[gd_scene load_steps=3 format=3 uid="uid://d25qe8nggfwv6"]
 
 [ext_resource type="Texture2D" uid="uid://b2u2ccr1d8xy8" path="res://graphics/Enemies/bee/0.png" id="1_1q2x0"]
+[ext_resource type="Script" uid="uid://dxnwha5s7fgb5" path="res://scenes/bee.gd" id="1_vie5o"]
 
 [node name="Bee" type="Area2D"]
 collision_layer = 2
 collision_mask = 5
+script = ExtResource("1_vie5o")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_1q2x0")
@@ -13,3 +15,5 @@ texture = ExtResource("1_1q2x0")
 light_mask = 2
 visibility_layer = 5
 polygon = PackedVector2Array(-5, -6, -5, -2, -3, 0, -3, 6, 3, 6, 3, -1, 5, -2, 5, -6)
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

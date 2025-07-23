@@ -19,7 +19,7 @@ func _on_body_entered(body):
 	body.has_gun = true
 
 	# player触碰后枪消失
-	$Sprite2D.visible = false
+	queue_free()
 	
 	
 

@@ -1,14 +1,6 @@
 extends CharacterBody2D
 
 
-# 方向输入
-var direction_x: float = 0.0
-
-
-# 设 在人物静止状态下的方向
-var last_facing_direction := 0  # 1 表示右，-1 表示左
-
-
 # 跳跃参数
 @export var jump_force_first_time: int = 0
 @export var jump_force_second_time: int = 0
@@ -21,30 +13,39 @@ var last_facing_direction := 0  # 1 表示右，-1 表示左
 # 横向移动速度
 @export var speed_horizonal: int = 150
 
+# 最终数值为 2
+@export var max_jump_count := 2
+
+
+
 
 # 二段跳
 # 设置初始数值为 0
 var jump_count := 0
 
 
-# 最终数值为 2
-@export var max_jump_count := 2
+# 方向输入
+var direction_x: float = 0.0
 
 
-# 射击冷却控制
-var can_shoot :bool = true
+# 设 在人物静止状态下的方向
+var last_facing_direction := 0  # 1 表示右，-1 表示左
+
 
 # 射击信号
 signal shoot(pos: Vector2)
 
 
 # 控制射击
+var can_shoot :bool = true # 射击冷却控制
 var is_shooting: bool = false
 var shoot_hold_time: float = 0.0
 var shoot_trigger_threshold: float = 0.3  # 长按超过 0.3 秒触发持续射击
 
 # 默认情况下，玩家没有枪
 var has_gun :bool = false
+
+
 
 
 func _ready() -> void:
@@ -72,8 +73,18 @@ func _process(delta: float) -> void:
 	# 长按射击逻辑
 	if Input.is_action_pressed("shoot") and has_gun:
 		
-		# 因为在_process方法内，一旦触发（不管 长按或者点击）“shoot”按钮，就会触发“shoot_hold_time” 的增加
-		shoot_hold_time += delta
+		# 枪口火焰效果
+		if direction_x > 0:
+			$Fire.get_child(1).show() # 移动时，枪口 “右” 侧火焰效果开启
+		elif direction_x < 0:
+			$Fire.get_child(0).show() # 移动时，枪口 “左” 侧火焰效果开启
+		elif direction_x == 0 and $AnimatedSprite2D.flip_h == false: # 原地站立时，枪口 “右” 侧火焰效果开启
+			$Fire.get_child(1).show()
+		elif direction_x == 0 and $AnimatedSprite2D.flip_h == true: # 原地站立时，枪口 “左” 侧火焰效果开启
+			$Fire.get_child(0).show()
+		
+		
+		shoot_hold_time += delta # 因为在_process方法内，一旦触发（不管 长按或者点击）“shoot”按钮，就会触发“shoot_hold_time” 的增加
 		
 		if shoot_hold_time >= shoot_trigger_threshold and not is_shooting:
 			start_shooting()
@@ -150,11 +161,11 @@ func get_input():
 		
 
 
-	# 射击冷却判断
+	# 射击点射
 	if Input.is_action_just_pressed("shoot") and can_shoot and has_gun:
 			
-		
 		can_shoot = false
+		
 		
 		# 逻辑注释
 		"""
@@ -164,8 +175,19 @@ func get_input():
 		shoot.emit(global_position, last_facing_direction)
 		
 		# 启动冷却计时器
-		$Timers/CooldownTimer.start()
+		$Timers/CooldownTimer.start() 
+		$Timers/FireTimer.start()
 		
+		# 枪口火焰效果
+		if direction_x > 0:
+			$Fire.get_child(1).show() # 移动时，枪口 “右” 侧火焰效果开启
+		elif direction_x < 0:
+			$Fire.get_child(0).show() # 移动时，枪口 “左” 侧火焰效果开启
+		elif direction_x == 0 and $AnimatedSprite2D.flip_h == false: # 原地站立时，枪口 “右” 侧火焰效果开启
+			$Fire.get_child(1).show()
+		elif direction_x == 0 and $AnimatedSprite2D.flip_h == true: # 原地站立时，枪口 “左” 侧火焰效果开启
+			$Fire.get_child(0).show()
+			
 
 
 # 重力逻辑
@@ -177,6 +199,7 @@ func apply_gravity():
 func start_shooting():
 	is_shooting = true
 	can_shoot = false
+	
 	shoot.emit(global_position, last_facing_direction)
 	
 	$Timers/CooldownTimer.start()
@@ -185,6 +208,7 @@ func start_shooting():
 func stop_shooting():
 	is_shooting = false
 	can_shoot = true
+
 	$Timers/CooldownTimer.stop()
 
 
@@ -241,3 +265,8 @@ func get_animation():
 	
 
 	
+
+
+func _on_fire_timer_timeout() -> void:
+	for child in $Fire.get_children(): # 遍历Fire下面的项
+		child.hide() # 遍历后隐藏

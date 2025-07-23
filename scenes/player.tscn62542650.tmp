@@ -84,26 +84,22 @@ position_smoothing_speed = 15.0
 [node name="CooldownTimer" type="Timer" parent="Timers"]
 wait_time = 0.1
 
-[node name="FireTimer" type="Timer" parent="Timers"]
-wait_time = 0.1
-
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_g2els")
-animation = &"idle"
+animation = &"idle_shoot"
 autoplay = "idle"
 
 [node name="Fire" type="Node2D" parent="."]
 
 [node name="FireLeft" type="Sprite2D" parent="Fire"]
 visible = false
+position = Vector2(9, 2)
+texture = ExtResource("6_tuyoq")
+
+[node name="FireRight" type="Sprite2D" parent="Fire"]
+visible = false
 position = Vector2(-10, 2)
 texture = ExtResource("6_tuyoq")
 flip_h = true
 
-[node name="FireRight" type="Sprite2D" parent="Fire"]
-visible = false
-position = Vector2(9, 2)
-texture = ExtResource("6_tuyoq")
-
 [connection signal="timeout" from="Timers/CooldownTimer" to="." method="_on_cooldown_timer_timeout"]
-[connection signal="timeout" from="Timers/FireTimer" to="." method="_on_fire_timer_timeout"]
