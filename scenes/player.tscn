@@ -89,7 +89,7 @@ wait_time = 0.1
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_g2els")
-animation = &"idle"
+animation = &"idle_shoot"
 autoplay = "idle"
 
 [node name="Fire" type="Node2D" parent="."]

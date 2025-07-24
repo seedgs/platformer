@@ -1,19 +1,40 @@
-[gd_scene load_steps=3 format=3 uid="uid://d25qe8nggfwv6"]
+[gd_scene load_steps=5 format=3 uid="uid://d25qe8nggfwv6"]
 
 [ext_resource type="Texture2D" uid="uid://b2u2ccr1d8xy8" path="res://graphics/Enemies/bee/0.png" id="1_1q2x0"]
 [ext_resource type="Script" uid="uid://dxnwha5s7fgb5" path="res://scenes/bee.gd" id="1_vie5o"]
+[ext_resource type="Texture2D" uid="uid://diuxteor2837v" path="res://graphics/Enemies/bee/1.png" id="3_ogg2i"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qf6nb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_1q2x0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_ogg2i")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 7.0
+}]
 
 [node name="Bee" type="Area2D"]
 collision_layer = 2
-collision_mask = 5
+collision_mask = 13
 script = ExtResource("1_vie5o")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_1q2x0")
+speed = 110.0
+swing_range = 30.0
+switch_interval = 1.5
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 light_mask = 2
 visibility_layer = 5
 polygon = PackedVector2Array(-5, -6, -5, -2, -3, 0, -3, 6, 3, 6, 3, -1, 5, -2, 5, -6)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_qf6nb")
+animation = &"Idle"
+autoplay = "Idle"
+frame_progress = 0.263458
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]

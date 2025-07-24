@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=4 uid="uid://cm3egxg8id4ko"]
+[gd_scene load_steps=13 format=4 uid="uid://cm3egxg8id4ko"]
 
 [ext_resource type="Texture2D" uid="uid://cmrq3nejm0hua" path="res://graphics/level/tilesets/level_tilemap.png" id="1_2q6dc"]
 [ext_resource type="Script" uid="uid://vp1lwu8pgwjr" path="res://scenes/level.gd" id="1_mx8sn"]
 [ext_resource type="PackedScene" uid="uid://ca7oslx7l1p03" path="res://scenes/player.tscn" id="2_w7c3h"]
 [ext_resource type="PackedScene" uid="uid://d25qe8nggfwv6" path="res://scenes/bee.tscn" id="4_mx8sn"]
+[ext_resource type="PackedScene" uid="uid://dym88u1a01l0c" path="res://scenes/Worm.tscn" id="5_2r41h"]
 [ext_resource type="PackedScene" uid="uid://bestklm84v3gi" path="res://scenes/gun.tscn" id="5_ppgk2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w7c3h"]
@@ -57,14 +58,14 @@ tile_set = SubResource("TileSet_rd3vj")
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("2_w7c3h")]
 position = Vector2(245, 15)
-gravity_force = 10
-speed_horizonal = 150
-max_jump_count = 2
 
 [node name="Enemies" type="Node2D" parent="."]
 
 [node name="Bee" parent="Enemies" instance=ExtResource("4_mx8sn")]
-position = Vector2(294, 45)
+position = Vector2(310, 32)
+
+[node name="Worm" parent="Enemies" instance=ExtResource("5_2r41h")]
+position = Vector2(312, 60)
 
 [node name="Floor" type="Node2D" parent="."]
 

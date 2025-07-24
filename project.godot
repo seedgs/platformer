@@ -23,6 +23,10 @@ Player="*res://player.gd"
 
 project/assembly_name="Platformer"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/script-ide/plugin.cfg")
+
 [input]
 
 Left={

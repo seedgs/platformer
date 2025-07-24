@@ -52,7 +52,6 @@ func _ready() -> void:
 	pass
 
 
-
 func _process(delta: float) -> void:
 	get_input()
 	apply_gravity()
@@ -93,8 +92,6 @@ func _process(delta: float) -> void:
 		stop_shooting()
 
 	
-
-
 # 玩家输入
 func get_input():
 	
@@ -189,7 +186,6 @@ func get_input():
 			$Fire.get_child(0).show()
 			
 
-
 # 重力逻辑
 func apply_gravity():
 	velocity.y += gravity_force 
@@ -204,6 +200,7 @@ func start_shooting():
 	
 	$Timers/CooldownTimer.start()
 
+
 # 射击停止
 func stop_shooting():
 	is_shooting = false
@@ -212,6 +209,7 @@ func stop_shooting():
 	$Timers/CooldownTimer.stop()
 
 
+# 冷却时间
 func _on_cooldown_timer_timeout() -> void:
 	if is_shooting:
 		shoot.emit(global_position, last_facing_direction)
@@ -263,10 +261,7 @@ func get_animation():
 	$AnimatedSprite2D.animation = animation # 加载动画
 	
 	
-
-	
-
-
+# 射击火焰效果的消失时间
 func _on_fire_timer_timeout() -> void:
 	for child in $Fire.get_children(): # 遍历Fire下面的项
 		child.hide() # 遍历后隐藏
