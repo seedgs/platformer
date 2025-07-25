@@ -1,6 +1,10 @@
 extends CharacterBody2D
 
 
+# 注册为全域名，所有本都可以调用
+class_name playerscript
+
+
 # 跳跃参数
 @export var jump_force_first_time: int = 0
 @export var jump_force_second_time: int = 0
@@ -265,3 +269,7 @@ func get_animation():
 func _on_fire_timer_timeout() -> void:
 	for child in $Fire.get_children(): # 遍历Fire下面的项
 		child.hide() # 遍历后隐藏
+
+
+func test():
+	print("11111111111111111")

@@ -1,17 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://dym88u1a01l0c"]
+[gd_scene load_steps=6 format=3 uid="uid://dym88u1a01l0c"]
 
 [ext_resource type="Script" uid="uid://ddrd4rtt6x4dk" path="res://scenes/worm.gd" id="1_2s8qi"]
 [ext_resource type="Texture2D" uid="uid://bav77rf2re0o1" path="res://graphics/Enemies/worm/0.png" id="1_hqsf1"]
 [ext_resource type="Texture2D" uid="uid://bs3dmqr4oh527" path="res://graphics/Enemies/worm/1.png" id="3_1vv4n"]
-[ext_resource type="Shader" uid="uid://cqnehnpl32y5f" path="res://scenes/Flicker.gdshader" id="4_orl7b"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2s8qi"]
 size = Vector2(11, 8)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_orl7b"]
-shader = ExtResource("4_orl7b")
-shader_parameter/color = Color(1, 1, 1, 1)
-shader_parameter/amount = 0.0
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_orl7b"]
 animations = [{
@@ -33,14 +27,13 @@ collision_mask = 13
 script = ExtResource("1_2s8qi")
 Speed = 30.0
 switch_interval = 0.8
-health = 10
+health = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, 0)
 shape = SubResource("RectangleShape2D_2s8qi")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-material = SubResource("ShaderMaterial_orl7b")
 sprite_frames = SubResource("SpriteFrames_orl7b")
 animation = &"Idle"
 autoplay = "Idle"
@@ -48,4 +41,3 @@ frame = 1
 frame_progress = 0.447297
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]

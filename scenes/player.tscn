@@ -1,11 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://ca7oslx7l1p03"]
+[gd_scene load_steps=10 format=3 uid="uid://ca7oslx7l1p03"]
 
 [ext_resource type="Texture2D" uid="uid://dpkgupcki7wtc" path="res://graphics/player/basic/idle.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://cfksa5p18pqvy" path="res://scenes/player.gd" id="1_g2els"]
+[ext_resource type="Shader" uid="uid://cqnehnpl32y5f" path="res://scenes/Flicker.gdshader" id="3_fjrip"]
 [ext_resource type="Texture2D" uid="uid://cqo4awyiqpa5a" path="res://graphics/player/basic/walk.png" id="3_qhqgy"]
 [ext_resource type="Texture2D" uid="uid://cu584c1hwc2od" path="res://graphics/player/gun/idle.png" id="4_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://lgctyuqk541n" path="res://graphics/player/gun/walk.png" id="5_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://durvhg6ui6ok0" path="res://graphics/bullet/fire.png" id="6_tuyoq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fjrip"]
+shader = ExtResource("3_fjrip")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/amount = 0.0
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_g2els"]
 animations = [{
@@ -87,11 +93,6 @@ wait_time = 0.1
 [node name="FireTimer" type="Timer" parent="Timers"]
 wait_time = 0.1
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_g2els")
-animation = &"idle_shoot"
-autoplay = "idle"
-
 [node name="Fire" type="Node2D" parent="."]
 
 [node name="FireLeft" type="Sprite2D" parent="Fire"]
@@ -104,6 +105,12 @@ flip_h = true
 visible = false
 position = Vector2(9, 2)
 texture = ExtResource("6_tuyoq")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_fjrip")
+sprite_frames = SubResource("SpriteFrames_g2els")
+animation = &"idle_shoot"
+autoplay = "idle"
 
 [connection signal="timeout" from="Timers/CooldownTimer" to="." method="_on_cooldown_timer_timeout"]
 [connection signal="timeout" from="Timers/FireTimer" to="." method="_on_fire_timer_timeout"]
