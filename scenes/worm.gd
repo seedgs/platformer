@@ -64,10 +64,18 @@ func get_worm_situation(delta):
 	position.x += delta * Speed * move_direction
 	
 
+# 与蠕虫碰撞时
+func _on_body_entered(body: Node) -> void:
 
-func _on_body_entered(body: Node2D) -> void:
-	
-	# 调用已经设置全域名的脚本。先new()后再调用
-	var player = playerscript.new()
-	player.test()
+	# 如果进入的 body 是 playerscript 类型的对象（也就是 Player 节点），
+	# 就调用它的 get_damaged(20) 方法。
+	# body 是 与该 Area2D（即 worm）发生碰撞的物体(基本上是player)
+	if body is playerscript:
+		body.get_damaged(20)
+
+
+
+	# 全局调用方法(每次碰撞只调用一次，再次碰撞就会new一个新的)
+	#var player = playerscript.new()
+	#player.test()
 	

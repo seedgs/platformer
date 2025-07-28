@@ -93,6 +93,8 @@ wait_time = 0.1
 [node name="FireTimer" type="Timer" parent="Timers"]
 wait_time = 0.1
 
+[node name="InvincibilityTimer" type="Timer" parent="Timers"]
+
 [node name="Fire" type="Node2D" parent="."]
 
 [node name="FireLeft" type="Sprite2D" parent="Fire"]
@@ -114,3 +116,4 @@ autoplay = "idle"
 
 [connection signal="timeout" from="Timers/CooldownTimer" to="." method="_on_cooldown_timer_timeout"]
 [connection signal="timeout" from="Timers/FireTimer" to="." method="_on_fire_timer_timeout"]
+[connection signal="timeout" from="Timers/InvincibilityTimer" to="." method="_on_invincibility_timer_timeout"]

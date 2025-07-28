@@ -20,7 +20,7 @@ class_name playerscript
 # 最终数值为 2
 @export var max_jump_count := 2
 
-
+@export var health :float = 100 #玩家生命
 
 
 # 二段跳
@@ -50,6 +50,8 @@ var shoot_trigger_threshold: float = 0.3  # 长按超过 0.3 秒触发持续射�
 var has_gun :bool = false
 
 
+# 玩家受伤无敌状态
+var invincibilitySituation :bool = false
 
 
 func _ready() -> void:
@@ -60,7 +62,7 @@ func _process(delta: float) -> void:
 	get_input()
 	apply_gravity()
 	get_animation()
-	
+
 	
 
 	# 水平移动
@@ -271,5 +273,32 @@ func _on_fire_timer_timeout() -> void:
 		child.hide() # 遍历后隐藏
 
 
-func test():
-	print("11111111111111111")
+#func test():
+	#print("switch_worm_script")
+
+
+# 人物受伤逻辑
+func get_damaged(amount):
+
+	if invincibilitySituation == false:
+		health -= amount
+
+
+
+		# 当人物受伤时， "马上" 出现闪烁状态
+		var tween = create_tween()
+		tween.tween_property($AnimatedSprite2D,"material:shader_parameter/amount",1.0,0.0)
+		tween.tween_property($AnimatedSprite2D,"material:shader_parameter/amount",0.0,0.0).set_delay(0.08)
+
+
+		# 人物受伤的时候，“马上” 关闭受伤模式
+		invincibilitySituation = true 
+
+		# 人物受伤的时候，“马上” 开启计时器
+		$Timers/InvincibilityTimer.start()
+
+
+func _on_invincibility_timer_timeout() -> void:
+
+	# 当前碰撞的时候，“马上” 开启计时器，经过 规定秒数后，关闭无敌状态
+	invincibilitySituation = false
