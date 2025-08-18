@@ -1,81 +1,105 @@
 extends Area2D
 
-# 蠕虫敌人移动速度
-@export var Speed :float = 0
-# 蠕虫折返
-@export var switch_interval :float = 0
-# 蠕虫的血量
-@export var health :int = 0
+# --- 蠕虫属性 ---
+@export var Speed : float = 30
+@export var switch_interval : float = 2.0
+@export var health : int = 3
+@export var turn_pause_time : float = 0.2      # 掉头停顿时间
+@export var turn_lock_distance : float = 1.0  # 掉头后必须移动的距离
+@export var turn_tween_time : float = 0.2      # 平滑翻转时间
 
-@export var b_script_instance: Node
+# 这里会影响悬崖检测效果，当左右悬崖距离过小，这个时间需要相应缩小
+@export var min_move_after_turn : float = 0  # 掉头后至少移动时间
+
+var move_direction : int = 1 # 移动方向
+var time_accumulator : float = 0
+var turn_timer : float = 0.0
+var move_lock_timer : float = 0.0
+var last_turn_position_x : float = 0.0
+var is_turning : bool = false
+
+func _ready():
+	last_turn_position_x = position.x
+	# 确保 RayCast2D 正确启用
+	$one_detection_turn_direction/RayCast2D_Left.enabled = true
+	$one_detection_turn_direction/RayCast2D_Right.enabled = true
 
 
-
-# 内部累计时间
-var time_accumulator :float = 0
-# 设 蠕虫的右朝向为1
-var move_direction :int = 1
-
-
-
-# 检测蠕虫的每一帧状态
 func _process(delta: float) -> void:
 	get_worm_situation(delta)
 	Death()
-	
-	
-# 蠕虫与子弹撞后的状态
-func _on_area_entered(area: Area2D) -> void:
-	health -= 1
-	area.queue_free()  # 子弹碰撞后 “子弹”销毁
-
-	var tween = create_tween()
-	
-	# 在“position”位置，沿Vectir2(100,200)移动，持续1秒
-	# tween.tween_property(self,"position",Vector2(100,200),1) 
-	tween.tween_property($AnimatedSprite2D,"material:shader_parameter/amount",1.0,0.0)
-	
-	# set_delay(0.1)延迟0.1秒显示果
-	tween.tween_property($AnimatedSprite2D,"material:shader_parameter/amount",0.0,0.0).set_delay(0.08)
-	
-	
-	
-
-	
-		
-# 蠕虫 死亡状态
-func Death():
-	if health <= 0:
-		queue_free()  # 子弹碰撞后 “子弹”销毁
 
 
-# 蠕虫 通常状态
-func get_worm_situation(delta):
-	
-	var animation = 'Idle'
-	
+func get_worm_situation(delta: float):
 	time_accumulator += delta
 
-	if time_accumulator >= switch_interval:
+
+
+	# --- 掉头后移动锁定阶段 ---
+	if move_lock_timer > 0:
+		move_lock_timer -= delta
+		position.x += delta * Speed * move_direction
+		return  # 在锁定期内不检测悬崖和定时折返
+
+	is_turning = false
+
+	# --- 左右悬崖检测 ---
+	if move_direction == 1 and $one_detection_turn_direction/RayCast2D_Right.is_colliding() == false:
+		if abs(position.x - last_turn_position_x) >= turn_lock_distance:
+			move_direction = -1
+			is_turning = true
+	elif move_direction == -1 and $one_detection_turn_direction/RayCast2D_Left.is_colliding() == false:
+		if abs(position.x - last_turn_position_x) >= turn_lock_distance:
+			move_direction = 1
+			is_turning = true
+
+	# --- 定时折返 ---
+	if not is_turning and time_accumulator >= switch_interval:
 		move_direction *= -1
+		is_turning = true
+
+	# --- 掉头处理 ---
+	if is_turning:
+		turn_timer = turn_pause_time
 		time_accumulator = 0
-		$AnimatedSprite2D.flip_h = move_direction < 1
-		
+		last_turn_position_x = position.x
+		move_lock_timer = min_move_after_turn
+		smooth_turn()  # 平滑翻转
+
+	# --- 移动 ---
 	position.x += delta * Speed * move_direction
-	
 
-# 与蠕虫碰撞时
+
+# 平滑掉头动画
+func smooth_turn():
+	var tween = create_tween()
+	tween.tween_property($AnimatedSprite2D, "scale:x", sign(move_direction), turn_tween_time)
+
+
+# 蠕虫死亡
+func Death():
+	if health <= 0:
+		queue_free()
+
+
+# 碰到子弹
+func _on_area_entered(area: Area2D) -> void:
+	health -= 1
+	area.queue_free()
+	var tween = create_tween()
+	tween.tween_property($AnimatedSprite2D,"material:shader_parameter/amount",1.0,0.0)
+	tween.tween_property($AnimatedSprite2D,"material:shader_parameter/amount",0.0,0.0).set_delay(0.08)
+
+
+# 碰到玩家
 func _on_body_entered(body: Node) -> void:
-
-	# 如果进入的 body 是 playerscript 类型的对象（也就是 Player 节点），
-	# 就调用它的 get_damaged(20) 方法。
-	# body 是 与该 Area2D（即 worm）发生碰撞的物体(基本上是player)
 	if body is playerscript:
 		body.get_damaged(20)
 
 
+#func _on_left_body_exited(body: Node2D) -> void:
+	#move_direction = 1
 
-	# 全局调用方法(每次碰撞只调用一次，再次碰撞就会new一个新的)
-	#var player = playerscript.new()
-	#player.test()
-	
+
+#func _on_right_body_exited(body: Node2D) -> void:
+	#move_direction = -1

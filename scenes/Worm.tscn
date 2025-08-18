@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dym88u1a01l0c"]
+[gd_scene load_steps=9 format=3 uid="uid://dym88u1a01l0c"]
 
 [ext_resource type="Script" uid="uid://ddrd4rtt6x4dk" path="res://scenes/worm.gd" id="1_2s8qi"]
 [ext_resource type="Texture2D" uid="uid://bav77rf2re0o1" path="res://graphics/Enemies/worm/0.png" id="1_hqsf1"]
@@ -27,13 +27,13 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_orl7b"]
+size = Vector2(3, 4)
+
 [node name="Worm" type="Area2D"]
 collision_layer = 2
-collision_mask = 13
+collision_mask = 29
 script = ExtResource("1_2s8qi")
-Speed = 30.0
-switch_interval = 0.8
-health = 10
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, 0)
@@ -47,5 +47,32 @@ autoplay = "Idle"
 frame = 1
 frame_progress = 0.447297
 
+[node name="one_detection_turn_direction" type="Node2D" parent="."]
+
+[node name="RayCast2D_Left" type="RayCast2D" parent="one_detection_turn_direction"]
+position = Vector2(-6, 4)
+target_position = Vector2(0, 21)
+
+[node name="RayCast2D_Right" type="RayCast2D" parent="one_detection_turn_direction"]
+position = Vector2(5, 4)
+target_position = Vector2(0, 21)
+
+[node name="two_detection_turn_direction" type="Node2D" parent="."]
+visible = false
+
+[node name="Left" type="Area2D" parent="two_detection_turn_direction"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="two_detection_turn_direction/Left"]
+position = Vector2(-8, 6)
+shape = SubResource("RectangleShape2D_orl7b")
+
+[node name="Right" type="Area2D" parent="two_detection_turn_direction"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="two_detection_turn_direction/Right"]
+position = Vector2(7, 6)
+shape = SubResource("RectangleShape2D_orl7b")
+
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="two_detection_turn_direction/Left" to="." method="_on_left_body_exited"]
+[connection signal="body_exited" from="two_detection_turn_direction/Right" to="." method="_on_right_body_exited"]
