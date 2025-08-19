@@ -1,15 +1,15 @@
 extends Area2D
 
 # --- 蠕虫属性 ---
-@export var Speed : float = 30
-@export var switch_interval : float = 2.0
+@export var speed: float = 30
+@export var switch_interval : float = 2.0 # 巡逻的折返时间
 @export var health : int = 3
 @export var turn_pause_time : float = 0.2      # 掉头停顿时间
 @export var turn_lock_distance : float = 1.0  # 掉头后必须移动的距离
 @export var turn_tween_time : float = 0.2      # 平滑翻转时间
 
 # 这里会影响悬崖检测效果，当左右悬崖距离过小，这个时间需要相应缩小
-@export var min_move_after_turn : float = 0  # 掉头后至少移动时间
+@export var min_move_after_turn : float = 2  # 掉头后至少移动时间
 
 var move_direction : int = 1 # 移动方向
 var time_accumulator : float = 0
@@ -38,7 +38,7 @@ func get_worm_situation(delta: float):
 	# --- 掉头后移动锁定阶段 ---
 	if move_lock_timer > 0:
 		move_lock_timer -= delta
-		position.x += delta * Speed * move_direction
+		position.x += delta * speed * move_direction
 		return  # 在锁定期内不检测悬崖和定时折返
 
 	is_turning = false
@@ -67,7 +67,7 @@ func get_worm_situation(delta: float):
 		smooth_turn()  # 平滑翻转
 
 	# --- 移动 ---
-	position.x += delta * Speed * move_direction
+	position.x += delta * speed * move_direction
 
 
 # 平滑掉头动画

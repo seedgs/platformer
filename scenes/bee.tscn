@@ -26,12 +26,12 @@ animations = [{
 
 [node name="Bee" type="Area2D"]
 collision_layer = 2
-collision_mask = 13
+collision_mask = 5
 script = ExtResource("1_vie5o")
-speed = 110.0
 swing_range = 30.0
-Health = 2
 switch_interval = 1.5
+min_move_after_turn = 3.0
+turn_lock_distance = 4.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-5, -6, -5, -2, -3, 0, -3, 6, 3, 6, 3, -1, 5, -2, 5, -6)
@@ -42,5 +42,15 @@ sprite_frames = SubResource("SpriteFrames_qf6nb")
 animation = &"Idle"
 autoplay = "Idle"
 frame_progress = 0.263458
+
+[node name="one_detection_turn_direction" type="Node2D" parent="."]
+
+[node name="RayCast2D_Left" type="RayCast2D" parent="one_detection_turn_direction"]
+position = Vector2(-7, 5)
+target_position = Vector2(0, 21)
+
+[node name="RayCast2D_Right" type="RayCast2D" parent="one_detection_turn_direction"]
+position = Vector2(7, 5)
+target_position = Vector2(0, 21)
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]

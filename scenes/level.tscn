@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=4 uid="uid://cm3egxg8id4ko"]
+[gd_scene load_steps=14 format=4 uid="uid://cm3egxg8id4ko"]
 
 [ext_resource type="Texture2D" uid="uid://cmrq3nejm0hua" path="res://graphics/level/tilesets/level_tilemap.png" id="1_2q6dc"]
 [ext_resource type="Script" uid="uid://vp1lwu8pgwjr" path="res://scenes/level.gd" id="1_mx8sn"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://d25qe8nggfwv6" path="res://scenes/bee.tscn" id="4_mx8sn"]
 [ext_resource type="PackedScene" uid="uid://dym88u1a01l0c" path="res://scenes/Worm.tscn" id="5_2r41h"]
 [ext_resource type="PackedScene" uid="uid://bestklm84v3gi" path="res://scenes/gun.tscn" id="5_ppgk2"]
+[ext_resource type="PackedScene" uid="uid://jmsuo87ja2m" path="res://scenes/bee_2.tscn" id="6_klq6b"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w7c3h"]
 texture = ExtResource("1_2q6dc")
@@ -38,7 +39,7 @@ texture = ExtResource("1_2q6dc")
 sources/0 = SubResource("TileSetAtlasSource_w7c3h")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w8frs"]
-size = Vector2(160, 1)
+size = Vector2(160, 2)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mx8sn"]
 size = Vector2(48, 1)
@@ -57,7 +58,7 @@ tile_map_data = PackedByteArray("AAANAAQAAAADAAAAAAAOAAQAAAABAAIAAAAPAAQAAAAAAAI
 tile_set = SubResource("TileSet_rd3vj")
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("2_w7c3h")]
-position = Vector2(245, 15)
+position = Vector2(241, 32)
 
 [node name="Enemies" type="Node2D" parent="."]
 
@@ -65,14 +66,18 @@ position = Vector2(245, 15)
 position = Vector2(310, 32)
 
 [node name="Worm" parent="Enemies" instance=ExtResource("5_2r41h")]
-position = Vector2(432, 61)
+position = Vector2(357, 61)
+
+[node name="bee2" parent="Enemies" node_paths=PackedStringArray("marker1", "marker2") instance=ExtResource("6_klq6b")]
+marker1 = NodePath("../../BeePathPoints/Marker2D")
+marker2 = NodePath("../../BeePathPoints/Marker2D2")
 
 [node name="Floor" type="Node2D" parent="."]
 
 [node name="StaticBody2D2" type="StaticBody2D" parent="Floor"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/StaticBody2D2"]
-position = Vector2(288, 64.5)
+position = Vector2(288, 65)
 shape = SubResource("RectangleShape2D_w8frs")
 
 [node name="StaticBody2D3" type="StaticBody2D" parent="Floor"]
@@ -99,5 +104,13 @@ shape = SubResource("RectangleShape2D_2r41h")
 
 [node name="Gun" parent="Guns" instance=ExtResource("5_ppgk2")]
 position = Vector2(270, 51)
+
+[node name="BeePathPoints" type="Node2D" parent="."]
+
+[node name="Marker2D" type="Marker2D" parent="BeePathPoints"]
+position = Vector2(212, -17)
+
+[node name="Marker2D2" type="Marker2D" parent="BeePathPoints"]
+position = Vector2(310, -3)
 
 [connection signal="shoot" from="CharacterBody2D" to="." method="_on_character_body_2d_shoot"]

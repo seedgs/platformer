@@ -1,0 +1,37 @@
+[gd_scene load_steps=7 format=3 uid="uid://jmsuo87ja2m"]
+
+[ext_resource type="Script" uid="uid://ci24n5b7sjkkw" path="res://scenes/bee_2.gd" id="1_61lyd"]
+[ext_resource type="Shader" uid="uid://cqnehnpl32y5f" path="res://scenes/Flicker.gdshader" id="1_d0lmj"]
+[ext_resource type="Texture2D" uid="uid://b2u2ccr1d8xy8" path="res://graphics/Enemies/bee/0.png" id="2_61lyd"]
+[ext_resource type="Texture2D" uid="uid://diuxteor2837v" path="res://graphics/Enemies/bee/1.png" id="3_cb6an"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xhd4v"]
+shader = ExtResource("1_d0lmj")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/amount = 0.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dqwsx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_61lyd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_cb6an")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 7.0
+}]
+
+[node name="bee2" type="Area2D"]
+script = ExtResource("1_61lyd")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-5, -6, -5, -2, -3, 0, -3, 6, 3, 6, 3, -1, 5, -2, 5, -6)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_xhd4v")
+sprite_frames = SubResource("SpriteFrames_dqwsx")
+animation = &"Idle"
+autoplay = "Idle"

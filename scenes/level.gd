@@ -5,6 +5,8 @@ const bullet_scene: PackedScene = preload("res://scenes/bullet.tscn") # 打包�
 
 @export var bullet_initial_shoot_position: int = 15
 
+
+
 # 逻辑注解
 """
 # 虽然方法内没有 'last_facing_direction' 参数
