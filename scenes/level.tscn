@@ -1,9 +1,8 @@
-[gd_scene load_steps=14 format=4 uid="uid://cm3egxg8id4ko"]
+[gd_scene load_steps=13 format=4 uid="uid://cm3egxg8id4ko"]
 
 [ext_resource type="Texture2D" uid="uid://cmrq3nejm0hua" path="res://graphics/level/tilesets/level_tilemap.png" id="1_2q6dc"]
 [ext_resource type="Script" uid="uid://vp1lwu8pgwjr" path="res://scenes/level.gd" id="1_mx8sn"]
 [ext_resource type="PackedScene" uid="uid://ca7oslx7l1p03" path="res://scenes/player.tscn" id="2_w7c3h"]
-[ext_resource type="PackedScene" uid="uid://d25qe8nggfwv6" path="res://scenes/bee.tscn" id="4_mx8sn"]
 [ext_resource type="PackedScene" uid="uid://dym88u1a01l0c" path="res://scenes/Worm.tscn" id="5_2r41h"]
 [ext_resource type="PackedScene" uid="uid://bestklm84v3gi" path="res://scenes/gun.tscn" id="5_ppgk2"]
 [ext_resource type="PackedScene" uid="uid://jmsuo87ja2m" path="res://scenes/bee_2.tscn" id="6_klq6b"]
@@ -57,20 +56,21 @@ script = ExtResource("1_mx8sn")
 tile_map_data = PackedByteArray("AAANAAQAAAADAAAAAAAOAAQAAAABAAIAAAAPAAQAAAAAAAIAAAAQAAQAAAABAAIAAAARAAQAAAACAAIAAAASAAQAAAAAAAIAAAATAAQAAAAAAAIAAAAUAAQAAAABAAIAAAAVAAQAAAACAAIAAAAWAAQAAAAFAAAAAAAWAAYAAAAIAAEAAAAWAAUAAAAFAAEAAAAVAAUAAAAFAAIAAAAUAAUAAAAEAAIAAAATAAUAAAAEAAEAAAASAAUAAAAEAAEAAAARAAUAAAAEAAEAAAAQAAUAAAAEAAEAAAAPAAUAAAAEAAEAAAAOAAUAAAAEAAEAAAANAAUAAAADAAEAAAAKAAgAAAADAAAAAAAKAAkAAAADAAEAAAAKAAoAAAAGAAEAAAALAAoAAAAEAAEAAAALAAkAAAAEAAEAAAALAAgAAAABAAIAAAAMAAgAAAACAAIAAAAMAAkAAAAEAAEAAAAMAAoAAAAEAAIAAAANAAoAAAAFAAIAAAANAAkAAAAEAAEAAAANAAgAAAAEAAIAAAANAAcAAAAGAAEAAAANAAYAAAADAAEAAAAOAAYAAAAEAAEAAAAOAAcAAAAEAAEAAAAOAAgAAAAFAAIAAAAOAAkAAAAEAAEAAAAOAAoAAAAEAAEAAAAPAAoAAAAEAAEAAAAPAAkAAAAEAAEAAAAPAAgAAAAEAAEAAAAPAAcAAAAEAAEAAAAPAAYAAAAEAAEAAAAQAAYAAAAEAAEAAAAQAAcAAAAEAAEAAAAQAAgAAAAEAAIAAAAQAAkAAAAEAAEAAAAQAAoAAAAEAAEAAAARAAoAAAAEAAEAAAARAAkAAAAEAAEAAAARAAgAAAAFAAIAAAARAAcAAAAEAAEAAAARAAYAAAAEAAIAAAASAAYAAAAFAAIAAAASAAcAAAAEAAEAAAASAAgAAAAEAAEAAAASAAkAAAAFAAEAAAASAAoAAAAIAAEAAAATAAgAAAAEAAEAAAATAAcAAAAEAAEAAAATAAYAAAAEAAEAAAAUAAYAAAAEAAEAAAAUAAcAAAAFAAEAAAAUAAgAAAAIAAEAAAAVAAYAAAAEAAEAAAAbAAQAAAAFAAAAAAAbAAUAAAAFAAEAAAAdAAQAAAAGAAAAAAAdAAUAAAAGAAEAAAAeAAQAAAAHAAAAAAAeAAUAAAAHAAEAAAAfAAQAAAAIAAAAAAAfAAUAAAAIAAEAAAAYAAgAAAAJAAEAAAAYAAkAAAAJAAIAAAAaAAgAAAADAAAAAAAaAAkAAAADAAEAAAAbAAgAAAAEAAAAAAAbAAkAAAAEAAEAAAAcAAgAAAAFAAAAAAAcAAkAAAAFAAEAAAAaAAQAAAADAAAAAAAaAAUAAAADAAEAAAA=")
 tile_set = SubResource("TileSet_rd3vj")
 
-[node name="CharacterBody2D" parent="." instance=ExtResource("2_w7c3h")]
+[node name="player" parent="." instance=ExtResource("2_w7c3h")]
 position = Vector2(241, 32)
 
 [node name="Enemies" type="Node2D" parent="."]
 
-[node name="Bee" parent="Enemies" instance=ExtResource("4_mx8sn")]
-position = Vector2(310, 32)
-
-[node name="Worm" parent="Enemies" instance=ExtResource("5_2r41h")]
-position = Vector2(357, 61)
-
 [node name="bee2" parent="Enemies" node_paths=PackedStringArray("marker1", "marker2") instance=ExtResource("6_klq6b")]
+health = 5
+speed = 30.0
 marker1 = NodePath("../../BeePathPoints/Marker2D")
 marker2 = NodePath("../../BeePathPoints/Marker2D2")
+turn_tween_time = 0.2
+between_distance = 80.0
+
+[node name="Worm" parent="Enemies" instance=ExtResource("5_2r41h")]
+position = Vector2(351, 60)
 
 [node name="Floor" type="Node2D" parent="."]
 
@@ -108,9 +108,9 @@ position = Vector2(270, 51)
 [node name="BeePathPoints" type="Node2D" parent="."]
 
 [node name="Marker2D" type="Marker2D" parent="BeePathPoints"]
-position = Vector2(212, -17)
+position = Vector2(205, -20)
 
 [node name="Marker2D2" type="Marker2D" parent="BeePathPoints"]
-position = Vector2(310, -3)
+position = Vector2(360, 25)
 
-[connection signal="shoot" from="CharacterBody2D" to="." method="_on_character_body_2d_shoot"]
+[connection signal="shoot" from="player" to="." method="_on_character_body_2d_shoot"]

@@ -25,7 +25,10 @@ animations = [{
 }]
 
 [node name="bee2" type="Area2D"]
+collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_61lyd")
+stop_distance = 1.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-5, -6, -5, -2, -3, 0, -3, 6, 3, 6, 3, -1, 5, -2, 5, -6)
@@ -35,3 +38,5 @@ material = SubResource("ShaderMaterial_xhd4v")
 sprite_frames = SubResource("SpriteFrames_dqwsx")
 animation = &"Idle"
 autoplay = "Idle"
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

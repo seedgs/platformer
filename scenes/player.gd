@@ -22,6 +22,8 @@ class_name playerscript
 
 @export var health :float = 100 #玩家生命
 
+@onready var bee = get_node("../Enemies/bee2") 
+
 
 # 二段跳
 # 设置初始数值为 0
@@ -302,3 +304,4 @@ func _on_invincibility_timer_timeout() -> void:
 
 	# 当前碰撞的时候，“马上” 开启计时器，经过 规定秒数后，关闭无敌状态
 	invincibilitySituation = false
+	
