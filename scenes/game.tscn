@@ -1,10 +1,26 @@
-[gd_scene load_steps=3 format=3 uid="uid://bxsmybrp862hw"]
+[gd_scene load_steps=7 format=3 uid="uid://bxsmybrp862hw"]
 
+[ext_resource type="PackedScene" uid="uid://di4e4uqm3jecq" path="res://scenes/ui.tscn" id="1_lnu2h"]
+[ext_resource type="Script" uid="uid://dgv1d770awvdl" path="res://scenes/game.gd" id="1_p57ef"]
 [ext_resource type="PackedScene" uid="uid://cm3egxg8id4ko" path="res://scenes/level.tscn" id="1_uwrxv"]
 [ext_resource type="PackedScene" uid="uid://b4uac3vhvuoxo" path="res://scenes/bg.tscn" id="2_yqjtg"]
+[ext_resource type="PackedScene" uid="uid://d2be8hv5yggx4" path="res://scenes/game_over.tscn" id="4_lbhrr"]
+[ext_resource type="AudioStream" uid="uid://cbxy3piryl2eu" path="res://audio/bg_music.ogg" id="5_iywne"]
 
 [node name="Game" type="Node"]
+script = ExtResource("1_p57ef")
 
 [node name="Level" parent="." instance=ExtResource("1_uwrxv")]
 
 [node name="BG" parent="." instance=ExtResource("2_yqjtg")]
+
+[node name="UI" parent="." instance=ExtResource("1_lnu2h")]
+
+[node name="GameOver" parent="." instance=ExtResource("4_lbhrr")]
+visible = false
+
+[node name="Sounds" type="Node" parent="."]
+
+[node name="BgAudio" type="AudioStreamPlayer2D" parent="Sounds"]
+stream = ExtResource("5_iywne")
+volume_db = -13.031

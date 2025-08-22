@@ -24,7 +24,9 @@ class_name playerscript
 
 @onready var bee = get_node("../Enemies/bee2") 
 
+@onready var gameoverUI = get_tree().root.get_node("Game/GameOver") # 直接路径寻找gameover
 
+@onready var bgsound = get_tree().root.get_node("Game/Sounds/BgAudio") # 直接路径寻找背景音乐 
 # 二段跳
 # 设置初始数值为 0
 var jump_count := 0
@@ -59,13 +61,12 @@ var invincibilitySituation :bool = false
 func _ready() -> void:
 	pass
 
-
 func _process(delta: float) -> void:
 	get_input()
 	apply_gravity()
 	get_animation()
 
-	
+	check_death()
 
 	# 水平移动
 	velocity.x = direction_x * speed_horizonal 
@@ -79,7 +80,7 @@ func _process(delta: float) -> void:
 	
 	# 长按射击逻辑
 	if Input.is_action_pressed("shoot") and has_gun:
-		
+		$Sounds/FireSounds.play() # 播放射击音效
 		# 枪口火焰效果
 		if direction_x > 0:
 			$Fire.get_child(1).show() # 移动时，枪口 “右” 侧火焰效果开启
@@ -159,7 +160,7 @@ func get_input():
 		velocity.y = jump_force_first_time
 		
 		jump_count += 1
-		
+		$Sounds/Jump.play()
 		
 		if jump_count == 2: # 当检测为二段跳状态的时候，第二次跳跃的力衰减为第一次的一半
 			velocity.y = jump_force_second_time
@@ -168,7 +169,7 @@ func get_input():
 
 	# 射击点射
 	if Input.is_action_just_pressed("shoot") and can_shoot and has_gun:
-			
+		
 		can_shoot = false
 		
 		
@@ -182,7 +183,7 @@ func get_input():
 		# 启动冷却计时器
 		$Timers/CooldownTimer.start() 
 		$Timers/FireTimer.start()
-		
+		$Sounds/FireSounds.play() # 播放射击音效
 		# 枪口火焰效果
 		if direction_x > 0:
 			$Fire.get_child(1).show() # 移动时，枪口 “右” 侧火焰效果开启
@@ -305,3 +306,12 @@ func _on_invincibility_timer_timeout() -> void:
 	# 当前碰撞的时候，“马上” 开启计时器，经过 规定秒数后，关闭无敌状态
 	invincibilitySituation = false
 	
+
+# 玩家死亡
+func check_death():
+	if health <= 0:
+		bgsound.stop()
+		gameoverUI.show()
+		hide()  # 隐藏玩家
+		set_process(false)  # 停止处理逻辑
+		set_physics_process(false) # 停止物理处理

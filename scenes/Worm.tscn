@@ -9,6 +9,7 @@
 size = Vector2(11, 8)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_orl7b"]
+resource_local_to_scene = true
 shader = ExtResource("4_orl7b")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/amount = 0.0

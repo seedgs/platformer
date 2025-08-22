@@ -1,6 +1,6 @@
 extends Area2D 
 
-@export var health: int = 5 # 血量
+@export var health: int = 3 # 血量
 @export var speed: float = 30 # 移动速度
 @export var marker1: Marker2D # A点
 @export var marker2: Marker2D # B点
@@ -21,6 +21,8 @@ var turning: bool = false
 
 func _ready() -> void:
 	position = marker1.position # 蜜蜂起始位置放在 marker1
+
+	connect("body_entered", Callable(self, "_on_body_entered")) # 手动连接 _on_body_entered 信号
 
 func _process(delta: float) -> void:
 	Death()
@@ -102,7 +104,7 @@ func _on_area_entered(area: Area2D) -> void:
 	tween.tween_property($AnimatedSprite2D, "material:shader_parameter/amount", 1.0, 0.0)
 	tween.tween_property($AnimatedSprite2D, "material:shader_parameter/amount", 0.0, 0.0).set_delay(0.08)
 
-# 碰到玩家
+# 碰到玩家扣血
 func _on_body_entered(body: Node) -> void:
 	if body is playerscript:
 		body.get_damaged(20)

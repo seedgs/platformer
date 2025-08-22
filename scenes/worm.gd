@@ -91,11 +91,11 @@ func _on_area_entered(area: Area2D) -> void:
 	tween.tween_property($AnimatedSprite2D,"material:shader_parameter/amount",0.0,0.0).set_delay(0.08)
 
 
-# 碰到玩家
+# 碰到玩家扣血
 func _on_body_entered(body: Node) -> void:
 	if body is playerscript:
 		body.get_damaged(20)
-
+		
 
 #func _on_left_body_exited(body: Node2D) -> void:
 	#move_direction = 1

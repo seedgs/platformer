@@ -33,6 +33,8 @@ func _ready() -> void:
 	$one_detection_turn_direction/RayCast2D_Left.enabled = true
 	$one_detection_turn_direction/RayCast2D_Right.enabled = true
 
+	connect("body_entered", Callable(self, "_on_body_entered"))
+
 # 检测蜜蜂的每一帧状态
 func _process(delta: float) -> void: 
 	get_bee_situation(delta)
@@ -114,4 +116,4 @@ func _on_area_entered(area: Area2D) -> void:
 func _on_body_entered(body: Node) -> void:
 	if body is playerscript:
 		body.get_damaged(20)
-		
+		print("碰到玩家")
